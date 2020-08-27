@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"alarm/common"
 	"alarm/dto"
 	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
+	"time"
 )
 
 type AlarmMsgController struct {
@@ -21,8 +23,17 @@ func (c *AlarmMsgController) SaveAlarmMsg() {
 	if err != nil {
 		logs.Info(msg)
 	}
-	logs.Info(msg)
+
+	cacheKey := "SaveAlarmMsg_" + msg.RequestNo
+
 	result := map[string]interface{}{"code": "200"}
+
+	if !common.CacheMemory.IsExist(cacheKey) {
+		common.CacheMemory.Put(cacheKey, cacheKey, 30*time.Second)
+		dto.DealSaveAlarmMsg(msg)
+	}
+
+	logs.Info(msg)
 
 	c.Data["json"] = result
 	c.ServeJSON()

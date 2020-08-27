@@ -1,11 +1,13 @@
 package main
 
 import (
+	"alarm/common"
+	"alarm/job"
 	"alarm/models"
 	_ "alarm/routers"
-	"alarm/services"
 	"alarm/utils"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -18,7 +20,10 @@ func main() {
 
 	initConfig()
 
-	//logs.SetLogger(logs.AdapterConsole, `{"level":1}`)
+	cache, _ := cache.NewCache("memory", `{"interval":60}`)
+	common.CacheMemory = cache
+
+	logs.SetLogger(logs.AdapterConsole, `{"level":1}`)
 
 	connection := beego.AppConfig.String("db.username") + ":" + beego.AppConfig.String("db.pwd") + "@tcp(" + beego.AppConfig.String("db.host") + ")/" + beego.AppConfig.String("db.name") + "?charset=utf8"
 
@@ -26,25 +31,24 @@ func main() {
 
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 
-	orm.RegisterDataBase("default", "mysql", connection)
-
-	orm.SetMaxIdleConns("default", 10)
-	orm.SetMaxOpenConns("default", 10)
+	orm.RegisterDataBase("default", "mysql", connection, 10, 10)
 
 	// 需要在init中注册定义的model
-	orm.RegisterModel(new(models.MonitorSql), new(models.DbConnection))
+	orm.RegisterModel(new(models.MonitorSql), new(models.DbConnection), new(models.AlarmMsg), new(models.DingTalk))
 
 	dbList := models.GetDbConnectionList()
 
 	for _, db := range dbList {
-		orm.RegisterDataBase(db.AliasName, db.DriverName, db.DataSource)
-		orm.SetMaxIdleConns(db.AliasName, 10)
-		orm.SetMaxOpenConns(db.AliasName, 10)
+		orm.RegisterDataBase(db.AliasName, db.DriverName, db.DataSource, 10, 10)
 	}
 
 	cronTab := utils.NewCrontab()
 
-	services.InitMonitorTask(cronTab)
+	common.AlarmCronTab = cronTab
+
+	job.InitMonitorJob()
+
+	job.InitAlarmMsgJob()
 
 	cronTab.Start()
 

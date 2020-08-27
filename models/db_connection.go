@@ -15,9 +15,7 @@ func GetDbConnectionList() []DbConnection {
 
 	o := orm.NewOrm()
 
-	qs := o.QueryTable("db_connection")
-
-	qs.All(&dbList)
+	_, _ = o.QueryTable("db_connection").All(&dbList)
 
 	return dbList
 }
