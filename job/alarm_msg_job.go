@@ -21,7 +21,7 @@ func InitAlarmMsgJob() {
 			var ids = make([]int64, len(alarmMsgList))
 			for idx, alarmMsg := range alarmMsgList {
 				msg := alarmMsg.Msg + " 发生时间：" + alarmMsg.CreateTime.Format("2006-01-02 15:04:05")
-				dingTalkMsg := `{"msgtype": "text", "text": {"content": "【水桥】` + msg + `"}}`
+				dingTalkMsg := `{"msgtype": "text", "text": {"content": "` + msg + `"}}`
 				logs.Info("发送钉钉机器人 %s 消息：%s", alarmMsg.AccessToken, dingTalkMsg)
 				go utils.PostJson("https://oapi.dingtalk.com/robot/send?access_token="+alarmMsg.AccessToken, dingTalkMsg, "application/json")
 				ids[idx] = alarmMsg.Id
