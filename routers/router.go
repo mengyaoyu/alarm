@@ -6,5 +6,10 @@ import (
 )
 
 func init() {
-	beego.Include(&controllers.AlarmMsgController{})
+	alarm := beego.NewNamespace("alarm-api",
+		beego.NSInclude(&controllers.TestController{}),
+		beego.NSInclude(&controllers.AlarmMsgController{}),
+		beego.NSInclude(&controllers.MonitorSqlController{}),
+	)
+	beego.AddNamespace(alarm)
 }

@@ -11,5 +11,6 @@ type TestController struct {
 // @router /test/get [get]
 func (c *TestController) Get() {
 	c.Ctx.WriteString(beego.AppConfig.String("test"))
-	c.ServeJSONP()
+	c.Data["json"] = map[string]interface{}{"code": "200"}
+	c.ServeJSON()
 }

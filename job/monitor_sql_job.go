@@ -46,7 +46,7 @@ func addMonitorSqlJob(sql models.MonitorSql) {
 			} else {
 				msg = note + " : " + result
 			}
-			requestNo := "monitor_sql_id_" + id + "_" + strconv.FormatInt(time.Now().Unix(), 10)
+			requestNo := "monitor_sql_id_" + id + "_" + strconv.FormatInt(time.Now().In(common.CstSh).Unix(), 10)
 			saveAlarmMsg := dto.SaveAlarmMsg{Msg: msg, RequestNo: requestNo, Sn: sql.Sn}
 			dto.DealSaveAlarmMsg(saveAlarmMsg)
 

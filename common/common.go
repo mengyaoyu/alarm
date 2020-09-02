@@ -3,6 +3,7 @@ package common
 import (
 	"alarm/utils"
 	"github.com/astaxie/beego/cache"
+	"time"
 )
 
 const JobPrefix = "Job_"
@@ -16,3 +17,5 @@ func DelJobById(jobId string) {
 		AlarmCronTab.DelByID(jobId)
 	}
 }
+
+var CstSh, _ = time.LoadLocation("Asia/Shanghai") //上海

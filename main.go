@@ -10,6 +10,7 @@ import (
 	"github.com/astaxie/beego/cache"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	_ "github.com/go-pg/pg"
 	_ "github.com/go-sql-driver/mysql"
 	"os"
 	"os/exec"
@@ -29,7 +30,15 @@ func main() {
 
 	logs.SetLogger(logs.AdapterFile, `{"filename":"info.log","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":10}`)
 
-	orm.RegisterDriver("mysql", orm.DRMySQL)
+	dbType := beego.AppConfig.String("db.type")
+
+	if dbType == "mysql" {
+		orm.RegisterDriver("mysql", orm.DRMySQL)
+	} else if dbType == "pgsql" {
+		orm.RegisterDriver("pgsql", orm.DRPostgres)
+	} else {
+		orm.RegisterDriver("mysql", orm.DRMySQL)
+	}
 
 	orm.RegisterDataBase("default", "mysql", connection, 10, 10)
 
