@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-type AlarmMsgController struct {
+type AlarmNoticeMsgController struct {
 	beego.Controller
 }
 
 // @router /alarm/msg/save [post]
-func (c *AlarmMsgController) SaveAlarmMsg() {
-	var msg dto.SaveAlarmMsg
+func (c *AlarmNoticeMsgController) SaveAlarmMsg() {
+	var msg dto.SaveAlarmNoticeMsg
 	data := c.Ctx.Input.RequestBody
 
 	//json数据封装到user对象中
@@ -30,7 +30,7 @@ func (c *AlarmMsgController) SaveAlarmMsg() {
 
 	if !common.CacheMemory.IsExist(cacheKey) {
 		common.CacheMemory.Put(cacheKey, cacheKey, 30*time.Second)
-		dto.DealSaveAlarmMsg(msg)
+		dto.DealSaveAlarmNoticeMsg(msg)
 	}
 
 	logs.Info(msg)

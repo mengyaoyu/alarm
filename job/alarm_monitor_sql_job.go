@@ -12,16 +12,16 @@ import (
 	"time"
 )
 
-func InitMonitorJob() {
+func InitAlarmNoticeMonitorJob() {
 
-	sqlList := models.GetMonitorSqlList(1)
+	sqlList := models.GetAlarmNoticeMonitorSqlList(1)
 
 	for _, sql := range sqlList {
-		addMonitorSqlJob(sql)
+		addAlarmNoticeMonitorSqlJob(sql)
 	}
 }
 
-func addMonitorSqlJob(sql models.MonitorSql) {
+func addAlarmNoticeMonitorSqlJob(sql models.AlarmNoticeMonitorSql) {
 	id := strconv.FormatInt(sql.Id, 10)
 	taskId := common.JobPrefix + id
 	qsl := sql.Sql
@@ -47,8 +47,8 @@ func addMonitorSqlJob(sql models.MonitorSql) {
 				msg = note + " : " + result
 			}
 			requestNo := "monitor_sql_id_" + id + "_" + strconv.FormatInt(time.Now().In(common.CstSh).Unix(), 10)
-			saveAlarmMsg := dto.SaveAlarmMsg{Msg: msg, RequestNo: requestNo, Sn: sql.Sn}
-			dto.DealSaveAlarmMsg(saveAlarmMsg)
+			saveAlarmMsg := dto.SaveAlarmNoticeMsg{Msg: msg, RequestNo: requestNo, Sn: sql.Sn}
+			dto.DealSaveAlarmNoticeMsg(saveAlarmMsg)
 
 		}
 	}
@@ -59,9 +59,9 @@ func addMonitorSqlJob(sql models.MonitorSql) {
 	}
 }
 
-func AddMonitorJob(sqlId int64) {
+func AddAlarmMonitorJob(sqlId int64) {
 	o := orm.NewOrm()
-	sql := models.GetMonitorSqlById(sqlId, o)
+	sql := models.GetAlarmNoticeMonitorSqlById(sqlId, o)
 
-	addMonitorSqlJob(sql)
+	addAlarmNoticeMonitorSqlJob(sql)
 }

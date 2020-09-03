@@ -7,16 +7,7 @@ import (
 
 func init() {
 
-    beego.GlobalControllerRouter["alarm/controllers:AlarmMsgController"] = append(beego.GlobalControllerRouter["alarm/controllers:AlarmMsgController"],
-        beego.ControllerComments{
-            Method: "SaveAlarmMsg",
-            Router: "/alarm/msg/save",
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["alarm/controllers:MonitorSqlController"] = append(beego.GlobalControllerRouter["alarm/controllers:MonitorSqlController"],
+    beego.GlobalControllerRouter["alarm/controllers:AlarmNoticeMonitorSqlController"] = append(beego.GlobalControllerRouter["alarm/controllers:AlarmNoticeMonitorSqlController"],
         beego.ControllerComments{
             Method: "StartMonitorTask",
             Router: "/monitor/start/task",
@@ -25,10 +16,19 @@ func init() {
             Filters: nil,
             Params: nil})
 
-    beego.GlobalControllerRouter["alarm/controllers:MonitorSqlController"] = append(beego.GlobalControllerRouter["alarm/controllers:MonitorSqlController"],
+    beego.GlobalControllerRouter["alarm/controllers:AlarmNoticeMonitorSqlController"] = append(beego.GlobalControllerRouter["alarm/controllers:AlarmNoticeMonitorSqlController"],
         beego.ControllerComments{
             Method: "StopMonitorTask",
             Router: "/monitor/stop/task",
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["alarm/controllers:AlarmNoticeMsgController"] = append(beego.GlobalControllerRouter["alarm/controllers:AlarmNoticeMsgController"],
+        beego.ControllerComments{
+            Method: "SaveAlarmMsg",
+            Router: "/alarm/msg/save",
             AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,

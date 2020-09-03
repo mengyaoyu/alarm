@@ -10,14 +10,14 @@ import (
 	"os"
 )
 
-func InitAlarmMsgJob() {
+func InitAlarmNoticeMsgJob() {
 	taskId := "SendAlarmMsg"
 	taskFunc := func() {
 		o := orm.NewOrm()
-		dingTalkList := models.GetDingTalkList(o)
+		dingTalkList := models.GetAlarmNoticeListenerList(o, "DT")
 
 		for _, dingTalk := range dingTalkList {
-			alarmMsgList := models.GetAlarmMsgListByAccessToken(dingTalk.AccessToken, 0, o)
+			alarmMsgList := models.GetAlarmNoticeListenerListByAccessToken(dingTalk.AccessToken, 0, o)
 			var ids = make([]int64, len(alarmMsgList))
 			for idx, alarmMsg := range alarmMsgList {
 				msg := alarmMsg.Msg + " 发生时间：" + alarmMsg.CreateTime.Format("2006-01-02 15:04:05")
@@ -26,7 +26,7 @@ func InitAlarmMsgJob() {
 				go utils.PostJson("https://oapi.dingtalk.com/robot/send?access_token="+alarmMsg.AccessToken, dingTalkMsg, "application/json")
 				ids[idx] = alarmMsg.Id
 			}
-			models.BatchUpdateAlarmMsgSuccess(ids, o)
+			models.BatchUpdateAlarmNoticeMsgSuccess(ids, o)
 		}
 	}
 

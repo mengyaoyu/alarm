@@ -43,9 +43,9 @@ func main() {
 	orm.RegisterDataBase("default", "mysql", connection, 10, 10)
 
 	// 需要在init中注册定义的model
-	orm.RegisterModel(new(models.MonitorSql), new(models.DbConnection), new(models.AlarmMsg), new(models.DingTalk))
+	orm.RegisterModel(new(models.AlarmNoticeMonitorSql), new(models.AlarmDbConnection), new(models.AlarmNoticeMsg), new(models.AlarmNoticeListener))
 
-	dbList := models.GetDbConnectionList()
+	dbList := models.GetAlarmDbConnectionList()
 
 	for _, db := range dbList {
 		orm.RegisterDataBase(db.AliasName, db.DriverName, db.DataSource, 10, 10)
@@ -55,9 +55,9 @@ func main() {
 
 	common.AlarmCronTab = cronTab
 
-	job.InitMonitorJob()
+	job.InitAlarmNoticeMonitorJob()
 
-	job.InitAlarmMsgJob()
+	job.InitAlarmNoticeMsgJob()
 
 	cronTab.Start()
 
