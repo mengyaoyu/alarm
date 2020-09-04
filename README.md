@@ -16,7 +16,7 @@
 
 ​	alarm_db_connection:数据库连接
 
-​	alarm_monitor_sql:业务SQL监控
+​	alarm_notice_monitor_sql:业务SQL监控
 
 ### SQL
 
@@ -34,10 +34,10 @@ CREATE TABLE `alarm_db_connection`  (
 )COMMENT = '数据源连接配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for alarm_monitor_sql
+-- Table structure for alarm_notice_monitor_sql
 -- ----------------------------
-DROP TABLE IF EXISTS `alarm_monitor_sql`;
-CREATE TABLE `alarm_monitor_sql`  (
+DROP TABLE IF EXISTS `alarm_notice_monitor_sql`;
+CREATE TABLE `alarm_notice_monitor_sql`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `cron` varchar(255) CHARACTER  NULL DEFAULT NULL COMMENT '表达式',
   `sql` varchar(255) CHARACTER  NULL DEFAULT NULL COMMENT 'SQL语句查询列名为 cnt 单条数据',
