@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/astaxie/beego/logs"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -57,6 +58,7 @@ func Post(url string, data interface{}, contentType string) (content string) {
 }
 
 func PostJson(url string, data string, contentType string) (content string) {
+	logs.Info("post contentType:%s ,url:%s ,data:%s ", contentType, url, data)
 	var jsonStr = []byte(data)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Add("content-type", contentType)
@@ -72,5 +74,6 @@ func PostJson(url string, data string, contentType string) (content string) {
 	defer resp.Body.Close()
 	result, _ := ioutil.ReadAll(resp.Body)
 	content = string(result)
+	logs.Info("post contentType:s% ,url:%s ,data:%s ,result:s% ", contentType, url, data, content)
 	return
 }

@@ -4,6 +4,7 @@ import (
 	"alarm/common"
 	"alarm/models"
 	"alarm/utils"
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
@@ -20,8 +21,20 @@ func InitAlarmNoticeMsgJob() {
 			alarmMsgList := models.GetAlarmNoticeListenerListByAccessToken(dingTalk.AccessToken, 0, o)
 			var ids = make([]int64, len(alarmMsgList))
 			for idx, alarmMsg := range alarmMsgList {
-				msg := alarmMsg.Msg + " 发生时间：" + alarmMsg.CreateTime.Format("2006-01-02 15:04:05")
-				dingTalkMsg := `{"msgtype": "text", "text": {"content": "` + msg + `"}}`
+				msg := alarmMsg.Msg + " 时间:" + alarmMsg.CreateTime.In(common.CstSh).Format("2006-01-02 15:04:05")
+
+				text := map[string]string{
+					"content": msg,
+				}
+
+				msgMap := map[string]interface{}{
+					"msgtype": "text",
+					"text":    text,
+				}
+
+				msgJson, _ := json.Marshal(msgMap)
+				dingTalkMsg := string(msgJson)
+
 				logs.Info("发送钉钉机器人 %s 消息：%s", alarmMsg.AccessToken, dingTalkMsg)
 				go utils.PostJson("https://oapi.dingtalk.com/robot/send?access_token="+alarmMsg.AccessToken, dingTalkMsg, "application/json")
 				ids[idx] = alarmMsg.Id

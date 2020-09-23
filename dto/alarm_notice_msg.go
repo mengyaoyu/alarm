@@ -1,7 +1,6 @@
 package dto
 
 import (
-	"alarm/common"
 	"alarm/models"
 	"github.com/astaxie/beego/orm"
 	"time"
@@ -22,7 +21,7 @@ func DealSaveAlarmNoticeMsg(msg SaveAlarmNoticeMsg) {
 
 	for idx, listener := range alarmNoticeListenerList {
 		alarmMsg := models.AlarmNoticeMsg{Msg: msg.Msg, Status: 0, AccessToken: listener.AccessToken,
-			CreateTime: time.Now().In(common.CstSh), UpdateTime: time.Now().In(common.CstSh), NoticeType: listener.NoticeType}
+			CreateTime: time.Now(), UpdateTime: time.Now(), NoticeType: listener.NoticeType}
 		alarmMsgList[idx] = alarmMsg
 	}
 

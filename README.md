@@ -34,10 +34,10 @@ CREATE TABLE `alarm_db_connection`  (
 )COMMENT = '数据源连接配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for alarm_notice_monitor_sql
+-- Table structure for alarm_monitor_sql
 -- ----------------------------
 DROP TABLE IF EXISTS `alarm_notice_monitor_sql`;
-CREATE TABLE `alarm_notice_monitor_sql`  (
+CREATE TABLE `alarm_monitor_sql`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `cron` varchar(255) CHARACTER  NULL DEFAULT NULL COMMENT '表达式',
   `sql` varchar(255) CHARACTER  NULL DEFAULT NULL COMMENT 'SQL语句查询列名为 cnt 单条数据',
@@ -135,7 +135,7 @@ INSERT INTO `alarm`.`alarm_notice_topic_listener`(`topic_id`, `listener_id`) VAL
 **2.2.1 业务数据库配置SQL**
 
 ```mysql
-INSERT INTO `alarm_prod`.`alarm_db_connection`(`id`, `alias_name`, `driver_name`, `data_source`) VALUES (1, 'flow', 'mysql', 'x:x*@tcp(x.com:3306)/Flow?charset=utf8');
+INSERT INTO `alarm_prod`.`alarm_db_connection`(`id`, `alias_name`, `driver_name`, `data_source`) VALUES (1, 'flow', 'mysql', 'wallet_only_select_user:wallet_only_select_user_password_2020*@tcp(aws-releases.cgqykpfbwhjk.ap-east-1.rds.amazonaws.com:3306)/Flow?charset=utf8');
 ```
 
 **2.2.1 插入业务监控SQL**
@@ -147,7 +147,7 @@ INSERT INTO `alarm`.`alarm_monitor_sql`(`cron`, `sql`, `alias_name`, `status`, `
 **2.2.2 根据SQL编号(id)启动监控**
 
 ```
-post请求：http://localhost:8900/alarm-api/monitor/start/task
+post请求：http://18.162.116.178:8900/alarm-api/monitor/start/task
 
 body: {"id":8}
 ```
@@ -155,7 +155,7 @@ body: {"id":8}
 **2.2.3 根据SQL编号(id)关闭监控**
 
 ```
-post请求：http://localhost:8900/alarm-api/monitor/stopc/task
+post请求：http://18.162.116.178:8900/alarm-api/monitor/stopc/task
 body: {"id":8}
 ```
 
@@ -166,7 +166,7 @@ body: {"id":8}
 **2.3.1 应用消息告警接入**
 
 ```
-post请求：http://localhost:8900/alarm-api/alarm/msg/save
+post请求：http://18.162.116.178:8900/alarm-api/alarm/msg/save
 body:{
     	"msg":"我是通过API给钉钉发送消息的~~~",
     	"sn":"5d608a828f45461bb7c8302494f106d7",

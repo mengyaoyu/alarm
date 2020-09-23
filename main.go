@@ -26,7 +26,7 @@ func main() {
 
 	logs.SetLogger(logs.AdapterConsole, `{"level":1}`)
 
-	connection := beego.AppConfig.String("db.username") + ":" + beego.AppConfig.String("db.pwd") + "@tcp(" + beego.AppConfig.String("db.host") + ")/" + beego.AppConfig.String("db.name") + "?charset=utf8"
+	connection := beego.AppConfig.String("db.username") + ":" + beego.AppConfig.String("db.pwd") + "@tcp(" + beego.AppConfig.String("db.host") + ")/" + beego.AppConfig.String("db.name") + "?charset=utf8&loc=Local"
 
 	logs.SetLogger(logs.AdapterFile, `{"filename":"info.log","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":10}`)
 
